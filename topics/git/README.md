@@ -4,9 +4,9 @@
 
 | Name              | Topic  | Objective & Instructions         | Solution                                    | Comments |
 | ----------------- | ------ | -------------------------------- | ------------------------------------------- | -------- |
-| My first Commit   | Commit | [Exercise](commit_01.md)         | [Solution](solutions/commit_01_solution.md) |          |
-| Time to Branch    | Branch | [Exercise](branch_01.md)         | [Solution](solutions/branch_01_solution.md) |          |
-| Squashing Commits | Commit | [Exercise](squashing_commits.md) | [Solution](solutions/squashing_commits.md)  |          |
+| My first Commit   | Commit | [Exercise](commit_01.md)         | [Solution](solutions/commit_01_solution.md) |   DONE   |
+| Time to Branch    | Branch | [Exercise](branch_01.md)         | [Solution](solutions/branch_01_solution.md) |   DONE   |
+| Squashing Commits | Commit | [Exercise](squashing_commits.md) | [Solution](solutions/squashing_commits.md)  |   DONE   |
 
 ## Questions
 
@@ -109,7 +109,7 @@ Next, you can try to enable `feature.manyFile` with `git config feature.manyFile
 
 Before enabling it, you might want to run `git update-index --test-untracked-cache` to test it out and make sure mtime operational on your system.
 
-Git also has the built-in `git-maintainence` command which optimizes Git repository so it's faster to run commands like `git add` or `git fatch` and also, the git repository takes less disk space. It's recommended to run this command periodically (e.g. each day).
+Git also has the built-in `git-maintenance` command which optimizes Git repository so it's faster to run commands like `git add` or `git fetch` and also, the git repository takes less disk space. It's recommended to run this command periodically (e.g. each day).
 
 In addition, track only what is used/modified by developers - some repositories may include generated files that are required for the project to run properly (or support certain accessibility options), but not actually being modified by any way by the developers. In that case, tracking them is futile.
 In order to avoid populating those file in the working directory, one can use the `sparse checkout` feature of Git.
@@ -260,6 +260,11 @@ git checkout HEAD~1 -- /path/of/the/file
 
 <details>
 <summary>How to squash last two commits?</summary><br><b>
+
+```
+git rebase -i HEAD~2
+```
+
 </b></details>
 
 <details>
@@ -301,7 +306,7 @@ You can use it for example to control endlines in files. In Windows and Unix bas
 <details>
 <summary>How do you discard local commits?</summary><br><b>
 
-`git reset HEAD~1` for removing last commit
+`git reset HEAD~1` for removing last commit. 
 If you would like to also discard the changes you `git reset --hard``
 </b></details>
 
