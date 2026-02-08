@@ -23,7 +23,7 @@ Disclaimer: developed by repository owner
       - [Scenarios](#scenarios-1)
     - [Kernel](#kernel)
     - [SSH](#ssh)
-    - [Globbing & Wildcards](#globbing--wildcards)
+    - [Globbing \& Wildcards](#globbing--wildcards)
     - [Boot Process](#boot-process)
     - [Disk and Filesystem](#disk-and-filesystem)
     - [Performance Analysis](#performance-analysis)
@@ -40,7 +40,7 @@ Disclaimer: developed by repository owner
     - [Virtualization](#virtualization)
     - [AWK](#awk)
     - [System Calls](#system-calls)
-    - [Filesystem & Files](#filesystem--files)
+    - [Filesystem \& Files](#filesystem--files)
     - [Advanced Networking](#advanced-networking)
     - [Memory](#memory)
     - [Distributions](#distributions)
@@ -586,18 +586,34 @@ tail -f <file_name>
 
 <details>
 <summary>Explain iostat output</summary><br><b>
+Display kernel I/O statistics on terminal, device and CPU operations. The first statistic represents the average over system uptime.
+The standard <code>iostat</code> device displays the following statistics:
+KB/t  kilobytes per transfer
+tps   transfers per second
+MB/s  megabytes per second
+
+For CPU:
+us  % of CPU time in user mode
+sy  % of CPU time in system mode
+id  % of CPU time in idle mode
 </b></details>
 
 <details>
 <summary>How to debug binaries?</summary><br><b>
+Can use <code>GDB (GNU Debugger)</code> or command line tools
+- Using GDB with command: `gdb /path/to/binary` or attach a running process: `gdb attch <PID>`
+- Using some command line: <code>strace</code> for tracing system calls or <code>ltrace</code> for tracing library calls
 </b></details>
 
 <details>
 <summary>What is the difference between CPU load and utilization?</summary><br><b>
+CPU load is the average number of processes that are either in a runnable or uninterruptible state. It indicates how many processes are competing for CPU time.
+CPU utilization, on the other hand, refers to the percentage of time the CPU is actively working on tasks. It measures how much of the CPU's capacity is being used.
 </b></details>
 
 <details>
 <summary>How you measure time execution of a program?</summary><br><b>
+Using the `time` command. For example: `time ls -l`
 </b></details>
 
 #### Scenarios
@@ -672,7 +688,7 @@ Usually it will reside in `/boot/config-<kernel version>.<os release>.<arch>`
 <details>
 <summary>Will running <code>sysctl -a</code> as a regular user vs. root, produce different result?</summary><br><b>
 
-Yes, you might notice that in most systems, when running `systctl -a` with root, you'll get more runtime parameters compared to executing the same command with a regular user.
+Yes, you might notice that in most systems, when running `sysctl -a` with root, you'll get more runtime parameters compared to executing the same command with a regular user.
 </b></details>
 
 <details>
@@ -738,6 +754,9 @@ It means that the key of the remote host was changed and doesn't match the one t
 
 <details>
 <summary>What is the difference between SSH and SSL?</summary><br><b>
+SSH (Secure Shell) and SSL (Secure Sockets Layer) are both cryptographic protocols used to secure communication over a network, but they serve different purposes and operate in different contexts.
+SSH is primarily used for secure remote access to systems and secure file transfers. It operates at the application layer and provides a secure channel for users to log into remote machines, execute commands, and transfer files securely. SSH uses public-key cryptography for authentication and encryption.
+SSL, on the other hand, is used to secure communication between web browsers and web servers.
 </b></details>
 
 <details>
@@ -802,6 +821,7 @@ Learn more : [How can I tell how many bits my ssh key is? - Superuser](https://s
 
 <details>
 <summary>What is SSH port forwarding?</summary><br><b>
+SSH port forwarding, also known as SSH tunneling, is a method of securely forwarding network traffic from one network node to another through an encrypted SSH connection. It allows users to create a secure tunnel between a local machine and a remote server, enabling them to access services on the remote server as if they were running locally.
 </b></details>
 
 <a name="questions-linux-wildcards"></a>
@@ -809,22 +829,34 @@ Learn more : [How can I tell how many bits my ssh key is? - Superuser](https://s
 
 <details>
 <summary>What is Globbing?</summary><br><b>
+Globbing is the process of pattern matching used by the shell to match filenames or strings using wildcards. It allows users to specify patterns that can match multiple files or directories based on certain criteria.
 </b></details>
 
 <details>
 <summary>What are wildcards? Can you give an example of how to use them?</summary><br><b>
+Wildcards are special characters that can be used to represent one or more characters in a string. They are commonly used in file and directory names to match multiple files or directories based on certain patterns.
+Examples of wildcards:
+* - matches zero or more characters
+? - matches exactly one character
+For example, to list all files in a directory that start with "file" and end with ".txt", you can use the following command:
+```
+ls file*.txt
+```
 </b></details>
 
 <details>
 <summary>Explain what will <code>ls [XYZ]</code> match</summary><br><b>
+It will match any file or directory that has a single character which is either X, Y, or Z.
 </b></details>
 
 <details>
 <summary>Explain what will <code>ls [^XYZ]</code> match</summary><br><b>
+It will match any file or directory that has a single character which is NOT X, Y, or Z.
 </b></details>
 
 <details>
 <summary>Explain what will <code>ls [0-5]</code> match</summary><br><b>
+It will match any file or directory that has a single character which is a number between 0 and 5.
 </b></details>
 
 <details>
@@ -863,10 +895,13 @@ lines 1 and 3.
 
 <details>
 <summary>What is the difference single and double quotes?</summary><br><b>
+Single quotes (' ') preserve the literal value of each character within the quotes. No special characters or variables are interpreted.
+Double quotes (" ") allow for the interpretation of special characters and variables within the quotes.
 </b></details>
 
 <details>
 <summary>What is escaping? What escape character is used for escaping?</summary><br><b>
+Escaping is a way to indicate that a character should be treated literally, rather than as a special character with a specific meaning. The escape character used in Linux is the backslash (\).
 </b></details>
 
 <details>
@@ -888,18 +923,25 @@ I consider this as a good blog post to read more about it: https://shapeshed.com
 <summary>Tell me everything you know about the Linux boot process</summary><br><b>
 
 Another way to ask this: what happens from the moment you turned on the server until you get a prompt
+1. BIOS/UEFI initialization
+2. Bootloader (GRUB2) loads the kernel into memory
+3. Kernel initialization
+4. init/systemd starts the user space and services
 </b></details>
 
 <details>
 <summary>What is GRUB2?</summary><br><b>
+GRUB2 (Grand Unified Bootloader version 2) is a bootloader package that supports multiple operating systems on a computer. It is the successor to GRUB (version 1) and is widely used in Linux distributions.
 </b></details>
 
 <details>
 <summary>What is Secure Boot?</summary><br><b>
+Secure Boot is a security standard developed to ensure that a device boots using only software that is trusted by the Original Equipment Manufacturer (OEM). When the PC starts, the firmware checks the signature of each piece of boot software, including firmware drivers (Option ROMs), EFI applications, and the operating system. If the signatures are valid, the PC boots, and the firmware gives control to the operating system.
 </b></details>
 
 <details>
 <summary>What can you find in /boot?</summary><br><b>
+The /boot directory contains the files needed to boot the Linux operating system, including the kernel, initial RAM disk (initrd or initramfs), and bootloader configuration files.
 </b></details>
 
 <a name="questions-linux-disk-fs"></a>
