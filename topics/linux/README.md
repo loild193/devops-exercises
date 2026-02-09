@@ -1004,6 +1004,8 @@ True.
 
 <details>
 <summary>What happens when you delete the original file in case of soft link and hard link?</summary><br><b>
+* Soft link: the link becomes broken and unusable
+* Hard link: the data remains accessible through the hard link as it points to the same inode
 </b></details>
 
 <details>
@@ -1014,6 +1016,7 @@ There are many answers for this question. One way is running `df -T`
 
 <details>
 <summary>What is a swap partition? What is it used for?</summary><br><b>
+A swap partition is a dedicated area on a hard drive or SSD that is used as virtual memory when the physical RAM (Random Access Memory) is full. When the system runs out of RAM, it moves some of the data that is not currently being used to the swap partition, freeing up RAM for other processes. This helps to prevent crashes and slowdowns when the system is under heavy load.
 </b></details>
 
 <details>
@@ -1030,6 +1033,7 @@ There are many answers for this question. One way is running `df -T`
 
 <details>
 <summary>You are trying to create a new file but you get "File system is full". You check with df for free space and you see you used only 20% of the space. What could be the problem?</summary><br><b>
+You probably ran out of inodes. You can check inode usage with `df -i`
 </b></details>
 
 <details>
@@ -1040,36 +1044,51 @@ There are many answers for this question. One way is running `df -T`
 
 <details>
 <summary>What is LVM?</summary><br><b>
+LVM (Logical Volume Manager) is a device mapper framework that provides logical volume management for the Linux kernel. It allows for flexible disk management by abstracting physical storage devices into logical volumes, which can be easily resized, moved, and managed without being tied to the underlying physical hardware.
 </b></details>
 
 <details>
 <summary>Explain the following in regards to LVM:
-
   * PV
   * VG
-  * LV</summary><br><b>
-
-
+  * LV
+</summary><br><b>
+  * PV (Physical Volume): A physical volume is a physical storage device, such as a hard disk or partition, that has been initialized for use with LVM. It serves as the building block for creating volume groups.
+  * VG (Volume Group): A volume group is a collection of physical volumes that are pooled together to create a single logical storage unit. Volume groups provide a layer of abstraction over physical storage devices, allowing for flexible allocation of storage space to logical volumes.
+  * LV (Logical Volume): A logical volume is a virtual partition created within a volume group. It can be used like a traditional partition, but it offers greater flexibility in terms of resizing and managing storage space. Logical volumes can be easily resized, moved, and managed without being tied to the underlying physical hardware.
 </b></details>
 
 <details>
 <summary>What is NFS? What is it used for?</summary><br><b>
+NFS (Network File System) is a distributed file system protocol that allows users to access files over a network as if they were stored on their local machine. It enables file sharing between different systems, allowing users to read, write, and modify files on remote servers.
 </b></details>
 
 <details>
 <summary>What RAID is used for? Can you explain the differences between RAID 0, 1, 5 and 10?</summary><br><b>
+RAID (Redundant Array of Independent Disks) is a data storage technology that combines multiple physical disk drives into a single logical unit for improved performance, redundancy, or both.
+- RAID 0 (Striping): Data is split across multiple disks, improving performance but offering no redundancy. If one disk fails, all data is lost.
+- RAID 1 (Mirroring): Data is duplicated across two disks, providing redundancy. If one disk fails, the other can continue to operate without data loss.
+- RAID 5 (Striping with Parity): Data and parity information are distributed across three or more disks. It offers a balance between performance and redundancy, allowing for one disk failure without data loss.
+- RAID 10 (1+0): Combines mirroring and striping by creating mirrored pairs of disks and then striping data across those pairs. It provides high performance and redundancy but requires at least four disks.
 </b></details>
 
 <details>
 <summary>Describe the process of extending a filesystem disk space</summary><br><b>
+1. Extend the underlying storage (e.g., increase the size of a virtual disk or add a new physical disk).
+2. If using LVM, extend the physical volume (PV) using `pvresize` or add a new PV using `vgextend`.
+3. Extend the volume group (VG) using `vgextend` if a new PV was added.
+4. Extend the logical volume (LV) using `lvextend` or `lvresize`.
+5. Finally, resize the filesystem using `resize2fs` (for ext4) or `xfs_growfs` (for XFS) to utilize the newly allocated space.
 </b></details>
 
 <details>
 <summary>What is lazy umount?</summary><br><b>
+Lazy umount is a method of unmounting a filesystem that allows the unmount operation to be deferred until the filesystem is no longer in use. This is useful when a filesystem is busy and cannot be unmounted immediately.
 </b></details>
 
 <details>
 <summary>What is tmpfs?</summary><br><b>
+tmpfs is a temporary file storage filesystem that uses volatile memory (RAM) for storage. It is designed to provide fast access to temporary files and data, as it resides in memory rather than on disk.
 </b></details>
 
 <details>
@@ -1077,6 +1096,9 @@ There are many answers for this question. One way is running `df -T`
 
   * /var/log/messages
   * /var/log/boot.log</summary><br><b>
+
+  * /var/log/messages: General system messages, including system errors, warnings, and informational messages from various system components and services.
+  * /var/log/boot.log: Contains messages related to the system boot process, including information about services and daemons that are started during boot.
 </b></details>
 
 <details>
@@ -1096,8 +1118,13 @@ One can use `uptime` or `top`
 
 <details>
 <summary>You know how to see the load average, great. but what each part of it means? for example 1.43, 2.34, 2.78</summary><br><b>
+The three numbers represent the system load average over different time intervals:
+- The first number (1.43) is the average load over the last 1 minute
+- The second number (2.34) is the average load over the last 5 minutes
+- The third number (2.78) is the average load over the last 15 minutes
 
 [This article](http://www.brendangregg.com/blog/2017-08-08/linux-load-averages.html) summarizes the load average topic in a great way
+
 </b></details>
 
 <details>
@@ -1246,6 +1273,9 @@ You can also try closing/terminating the parent process. This will make the zomb
   * Process which are Java processes
   * Zombie Processes
 </summary><br><b>
+  * ps -u <username>
+  * ps -ef | grep java
+  * ps aux | grep 'Z'
 
 If you mention at any point ps command with arguments, be familiar with what these arguments does exactly.
 </b></details>
@@ -1257,11 +1287,12 @@ It is the first process executed by the kernel during the booting of a system. I
 
 <details>
 <summary>Can you describe how processes are being created?</summary><br><b>
+Processes are created using the fork() system call, which creates a new process by duplicating the calling process. The new process is called the child process, and it inherits a copy of the parent's memory space, file descriptors, and other attributes. After the fork() call, the child process can execute a different program using the exec() family of functions.
 </b></details>
 
 <details>
 <summary>How to change the priority of a process? Why would you want to do that?</summary><br><b>
-To change the priority of a process, you can use the nice command in Linux. The nice command allows you to specify the priority of a process by assigning a priority value ranging from -20 to 19. A higher value of priority means lower priority for the process, and vice versa.
+To change the priority of a process, you can use the `nice command in Linux. The `nice` command allows you to specify the priority of a process by assigning a priority value ranging from -20 to 19. A higher value of priority means lower priority for the process, and vice versa.
 
 You may want to change the priority of a process to adjust the amount of CPU time it is allocated by the system scheduler. For example, if you have a CPU-intensive process running on your system that is slowing down other processes, you can lower its priority to give more CPU time to other processes.
 </b></details>
@@ -1315,10 +1346,12 @@ This is a great article on the topic: https://www.computerhope.com/jargon/f/file
 
 <details>
 <summary>What is NTP? What is it used for?</summary><br><b>
+NTP (Network Time Protocol) is a protocol used to synchronize the clocks of computers over a network. It is used to ensure that all devices on a network have the same time, which is important for various applications such as logging, security, and scheduling.
 </b></details>
 
 <details>
 <summary>Explain Kernel OOM</summary><br><b>
+Kernel OOM (Out of Memory) is a situation where the Linux kernel runs out of available memory to allocate to processes. When this happens, the kernel's OOM killer is triggered, which selects and terminates one or more processes to free up memory and prevent the system from crashing.
 </b></details>
 
 <a name="questions-linux-security"></a>
